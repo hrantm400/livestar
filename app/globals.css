@@ -1,0 +1,233 @@
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --bg-0: #06060a;
+  --bg-1: #0b0b13;
+  --bg-2: #13131d;
+  --line-1: rgba(236, 232, 223, 0.06);
+  --line-2: rgba(236, 232, 223, 0.10);
+  --line-3: rgba(236, 232, 223, 0.16);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg-0);
+  color: #ece8df;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "ss01", "cv11", "tnum" 1;
+  letter-spacing: -0.005em;
+}
+
+body {
+  /* Subtler, more restrained ambient lighting — no longer "demo glow" */
+  background-image:
+    radial-gradient(ellipse 1400px 700px at 88% -8%, rgba(232, 201, 130, 0.045), transparent 60%),
+    radial-gradient(ellipse 900px 600px at -5% 110%, rgba(151, 116, 203, 0.035), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* ---------- scrollbar ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.16); }
+
+/* ---------- selection ---------- */
+::selection { background: rgba(251, 191, 36, 0.3); color: #fff; }
+
+/* ---------- glass surfaces ---------- */
+/* Lighter, less aggressive — the previous "casino glow" felt demo-ish.
+   Editorial dark UIs lean into crisp hairlines + restrained translucency. */
+.glass {
+  background: linear-gradient(180deg, rgba(236, 232, 223, 0.025), rgba(236, 232, 223, 0.01));
+  border: 1px solid var(--line-1);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+}
+
+.glass-strong {
+  background: rgba(11, 11, 19, 0.88);
+  border: 1px solid var(--line-2);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+}
+
+/* ---------- hairline ---------- */
+.hairline-b { border-bottom: 1px solid var(--line-1); }
+.hairline-t { border-top: 1px solid var(--line-1); }
+
+/* ---------- pin marker ---------- */
+.pin-wrap {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  transform-origin: 50% 100%;
+  transition: transform 0.18s ease;
+}
+.pin-wrap:hover { transform: scale(1.15); z-index: 999; }
+
+.pin-body {
+  position: absolute;
+  inset: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.25),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+.pin-body span { transform: rotate(45deg); }
+
+.pin-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.pin-ring.now {
+  animation: pinPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pinPulse {
+  0% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.6); }
+  70% { box-shadow: 0 0 0 16px rgba(251, 191, 36, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0); }
+}
+
+/* ---------- maplibre overrides ---------- */
+.maplibregl-ctrl-attrib {
+  background: rgba(0, 0, 0, 0.5) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  font-size: 9px !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+.maplibregl-ctrl-attrib a { color: rgba(255, 255, 255, 0.6) !important; }
+
+.maplibregl-popup-content {
+  background: rgba(15, 15, 25, 0.96) !important;
+  border: 1px solid var(--line-3) !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  color: #f4f4f7 !important;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(20px);
+  font-family: var(--font-inter), sans-serif !important;
+  font-size: 12px !important;
+}
+.maplibregl-popup-tip {
+  border-top-color: rgba(15, 15, 25, 0.96) !important;
+}
+.maplibregl-popup-close-button {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 18px !important;
+  padding: 4px 8px !important;
+}
+
+.maplibregl-ctrl-group {
+  background: rgba(20, 20, 30, 0.92) !important;
+  border: 1px solid var(--line-2) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(10px);
+}
+.maplibregl-ctrl-group button {
+  background: transparent !important;
+  filter: invert(1);
+}
+.maplibregl-ctrl-group button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ---------- shimmer text ---------- */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0.7) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.5s linear infinite;
+}
+
+/* ---------- gold gradient text — softer for editorial use ---------- */
+.text-gold {
+  background: linear-gradient(135deg, #ece8df, #e8c982 70%, #c5a363);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- subtle film grain (kept very low so it's barely there) ---------- */
+.noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.018;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- editorial smallcaps label ---------- */
+.label-eyebrow {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+  color: rgba(236, 232, 223, 0.45);
+}
+
+/* ---------- elegant focus state ---------- */
+.focus-ring:focus-visible {
+  outline: 1px solid #e8c982;
+  outline-offset: 3px;
+}
+
+/* ---------- focus ring ---------- */
+.focus-ring:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
+/* ---------- fade mask ---------- */
+.mask-fade-x {
+  mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+
+/* ---------- no scrollbar ---------- */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ---------- kbd ---------- */
+kbd {
+  font-family: var(--font-jetbrains), ui-monospace, monospace;
+  font-size: 0.85em;
+}
